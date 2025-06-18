@@ -6,7 +6,11 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "https://telemedicine-app-lake.vercel.app",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 
 // Serve static files - ensure this path is correct
 const staticPath = path.join(__dirname, '../client/build');
@@ -23,8 +27,9 @@ app.get('/health', (req, res) => {
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "https://telemedicine-app-lake.vercel.app",
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
