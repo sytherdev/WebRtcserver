@@ -2,11 +2,24 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const path = require('path');
 const cors = require('cors');
 
 const app = express();
 app.use(cors());
 
+// Serve static files - ensure this path is correct
+const staticPath = path.join(__dirname, '../client/build');
+if (require('fs').existsSync(staticPath)) {
+    app.use(express.static(staticPath));
+} else {
+    console.warn('React build folder not found at:', staticPath);
+}
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
@@ -17,9 +30,7 @@ const io = socketIo(server, {
 
 const rooms = {};
 
-app.get('/', (req, res) => {
-    res.send('Welcome to the Telemedicine WebRTC Server');
-});
+
 
 io.on('connection', (socket) => {
     console.log(`New client connected: ${socket.id}`);
