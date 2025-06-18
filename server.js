@@ -6,11 +6,19 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://telemedicine-app-lake.vercel.app");
+    res.header("Access-Control-Allow-Methods", "GET,POST");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+});
 app.use(cors({
     origin: "https://telemedicine-app-lake.vercel.app",
     methods: ["GET", "POST"],
     credentials: true
 }));
+
+
 
 // Serve static files - ensure this path is correct
 const staticPath = path.join(__dirname, '../client/build');
