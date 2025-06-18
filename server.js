@@ -17,6 +17,10 @@ const io = socketIo(server, {
 
 const rooms = {};
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the Telemedicine WebRTC Server');
+});
+
 io.on('connection', (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
